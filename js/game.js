@@ -26,6 +26,7 @@ class Game {
 
     logic() {
         this.tank.logic();
+        this.fish.forEach(f => f.logic());
     }
 
     draw() {

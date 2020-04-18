@@ -24,8 +24,58 @@ class Fish {
             }
         }
 
-        this.x = random(0, canvas_width);
-        this.y = random(0, canvas_height);
+        this.x = random(30, canvas_width - 30);
+        this.y = random(30, canvas_height - 30);
+
+        this.max_x_velocity = 20;
+        this.min_x_velocity = -20;
+        this.min_y_velocity = -5;
+        this.max_y_velocity = 5;
+        this.x_velocity = random(this.min_x_velocity, this.max_x_velocity);
+        this.y_velocity = random(this.min_y_velocity, this.max_y_velocity);
+    }
+
+    logic() {
+        this.move()
+    }
+
+    move() {
+        this.x += this.x_velocity;
+        this.y += this.y_velocity;
+
+        this.x_velocity += random(-2, 2);
+        if (this.x_velocity < this.min_x_velocity) {
+            this.x_velocity = this.min_x_velocity;
+        }
+        else if (this.x_velocity > this.max_x_velocity) {
+            this.x_velocity = this.max_x_velocity;
+        }
+
+        this.y_velocity += random(-1, 1);
+        if (this.y_velocity < this.min_y_velocity) {
+            this.y_velocity = this.min_y_velocity;
+        }
+        else if (this.y_velocity > this.max_y_velocity) {
+            this.y_velocity = this.max_y_velocity;
+        }
+
+        if (this.x < 30) {
+            this.x = 30;
+            this.x_velocity = 0;
+        }
+        else if (this.x > canvas_width - 30) {
+            this.x = canvas_width - 30;
+            this.x_velocity = 0;
+        }
+
+        if (this.y < 30) {
+            this.y = 30;
+            this.y_velocity = 0;
+        }
+        else if (this.y > canvas_height - 30) {
+            this.y = canvas_height - 30;
+            this.y_velocity = 0;
+        }
     }
 
     draw() {

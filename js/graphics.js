@@ -1,4 +1,5 @@
 var context = document.querySelector('canvas').getContext('2d');
+context.imageSmoothingEnabled = false;
 
 function set_color(color){
     context.strokeStyle = color;
