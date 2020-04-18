@@ -110,9 +110,9 @@ class Fish {
                     this.dead_left_context.fillStyle = 'rgba(0, 0, 0, 0)';
                 }
                 else {
-                    let r = current_color[0] / 5;
-                    let g = current_color[1] / 5;
-                    let b = current_color[2] / 5;
+                    let r = current_color[0] / 3;
+                    let g = current_color[1] / 4;
+                    let b = current_color[2] / 4;
                     this.dead_left_context.fillStyle = 'rgb(' + r + ', ' + g + ', ' + b + ')';
                 }
                 this.dead_left_context.fillRect(i, j, 1, 1);
@@ -130,17 +130,27 @@ class Fish {
     }
 
     logic() {
+        // Aging.
         this.age += 0.1;
 
+        // Death.
         if (! this.is_dead) {
+            // Due to age.
             let chance_of_dying = Math.exp((this.age - 100) / 5) * 100;
-            let rand = random(1, 100);
-            if (rand < chance_of_dying) {
-                console.log('Dead at age ' + this.age + ', ' + rand + ' < ' + chance_of_dying);
+            if (random(1, 100) < chance_of_dying) {
                 this.is_dead = true;
+            }
+
+            // Due to lack of oxygen.
+            if (this.tank.oxygen_level < 60) {
+                let chance_of_dying = 1 / this.tank.oxygen_level * 100;
+                if (random(0, 100) < chance_of_dying) {
+                    this.is_dead = true;
+                }
             }
         }
 
+        // Movement.
         if (this.is_dead) {
             this.move_to_top();
         }

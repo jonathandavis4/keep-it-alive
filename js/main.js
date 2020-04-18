@@ -24,4 +24,16 @@ ready(function() {
         },
         100
     );
+
+    document.querySelector('canvas').addEventListener('mousedown', function(e) {
+        // Oxygen pump button.
+        if (
+            810 < e.offsetX &&
+            e.offsetX < 980 &&
+            110 < e.offsetY &&
+            e.offsetY < 145
+        ) {
+            game.tank.air_pump_is_working = true;
+        }
+    })
 });

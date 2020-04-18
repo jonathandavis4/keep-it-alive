@@ -11,6 +11,10 @@ class Tank {
         this.width = canvas_width - 200;
         this.top_space = 40;
         this.height = canvas_height - this.top_space;
+
+        this.air_pump_is_working = true;
+        this.bubbles = [];
+        this.oxygen_level = 100;
     }
 
     logic() {
@@ -37,16 +41,49 @@ class Tank {
         else if (this.water_color[2] > this.water_color_max_blue) {
             this.water_color[2] = this.water_color_max_blue;
         }
+
+        // Logic for the air pump.
+        if (random(0, 200) < 1) {
+            this.air_pump_is_working = false;
+        }
+        if (this.air_pump_is_working) {
+            if (random(0, 10) < 4) {
+                this.bubbles.push(new Bubble(275, this.height - 40 + this.top_space));
+            }
+            this.oxygen_level += 0.1;
+        }
+        else {
+            this.oxygen_level -= 0.5;
+        }
+        if (this.oxygen_level < 0) {
+            this.oxygen_level = 0;
+        }
+        if (this.oxygen_level > 100) {
+            this.oxygen_level = 100;
+        }
+
+        this.bubbles.forEach(bubble => bubble.move());
+        // Remove bubbles which have left the water.
+        let new_bubbles = [];
+        this.bubbles.forEach(function(bubble) {
+            if (bubble.y >= 60) {
+                new_bubbles.push(bubble);
+            }
+        })
+        this.bubbles = new_bubbles;
     }
 
     draw() {
-        // Fill the background.
-        set_color('#aaccff')
-        fill_rect(0, 0, canvas_width, canvas_height);
-
         // Draw the water.
         set_color('rgb(' + this.water_color[0] + ', ' + this.water_color[1] + ', ' + this.water_color[2] + ')');
         fill_rect(15, 15 + this.top_space, this.width - 15, this.height - 15 + this.top_space);
+
+        // Draw the air pump.
+        set_color('rgba(255, 255, 255, 0.2)');
+        fill_rect(250, 400, 300, this.height - 10 + this.top_space);
+
+        // Draw the bubbles.
+        this.bubbles.forEach(bubble => bubble.draw());
 
         // Draw the tank.
         let brown = '#3c0f0c';

@@ -13,6 +13,17 @@ function fill_rect(x1, y1, x2, y2){
     context.fillRect(x1, y1, width, height);
 }
 
+function stroke_circle(x, y, radius) {
+    context.beginPath();
+    context.ellipse(
+        x, y,
+        radius, radius,
+        0,
+        0, 2 * Math.PI
+    );
+    context.stroke();
+}
+
 function random_color() {
     var r = random(0, 255);
     var g = random(0, 255);
