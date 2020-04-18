@@ -230,18 +230,18 @@ class Fish {
     draw() {
         if (this.is_alive) {
             if (this.x_velocity > 0) {
-                draw_image(this.right_canvas, this.right_canvas.width, this.right_canvas.height, this.x, this.y, 2);
+                draw_image(this.right_canvas, this.right_canvas.width, this.right_canvas.height, this.x, this.y, (this.age / 50) + 1);
             }
             else {
-                draw_image(this.left_canvas, this.left_canvas.width, this.left_canvas.height, this.x, this.y, 2);
+                draw_image(this.left_canvas, this.left_canvas.width, this.left_canvas.height, this.x, this.y, (this.age / 50) + 1);
             }
         }
         else {
             if (this.x_velocity > 0) {
-                draw_image(this.dead_right_canvas, this.dead_right_canvas.width, this.dead_right_canvas.height, this.x, this.y, 2);
+                draw_image(this.dead_right_canvas, this.dead_right_canvas.width, this.dead_right_canvas.height, this.x, this.y, (this.age / 50) + 1);
             }
             else {
-                draw_image(this.dead_left_canvas, this.dead_left_canvas.width, this.dead_left_canvas.height, this.x, this.y, 2);
+                draw_image(this.dead_left_canvas, this.dead_left_canvas.width, this.dead_left_canvas.height, this.x, this.y, (this.age / 50) + 1);
             }
         }
     }

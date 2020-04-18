@@ -1,0 +1,6 @@
+To Do
+=====
+
+- Implement death due to overcrowding.
+- Implement feeding and hunger.
+- Implement colour inheritance in offspring.
