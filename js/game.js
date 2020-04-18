@@ -2,7 +2,7 @@ class Game {
     constructor() {
         this.tank = new Tank();
 
-        let initial_fish_count = 40;
+        let initial_fish_count = 10;
         this.fish = [];
         for (let i = 0; i < initial_fish_count; i++) {
             this.fish.push(new Fish(this.tank));

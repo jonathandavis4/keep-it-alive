@@ -2,6 +2,7 @@ class Fish {
     constructor(tank) {
         this.tank = tank;
 
+        this.is_alive = true;
         this.age = random(0, 60);
 
         this.left_canvas = document.createElement('canvas');
@@ -11,7 +12,8 @@ class Fish {
 
         // Select the fish image.
         let fish_image = null;
-        fish_image = eval('image_fish_' + random(1, 3));
+        this.species = random(1, 3);
+        fish_image = eval('image_fish_' + this.species);
 
         // Prepare the image.
         for (let j = 0; j < this.left_canvas.height; j++) {
@@ -134,28 +136,28 @@ class Fish {
         this.age += 0.1;
 
         // Death.
-        if (! this.is_dead) {
+        if (this.is_alive) {
             // Due to age.
             let chance_of_dying = Math.exp((this.age - 100) / 5) * 100;
             if (random(1, 100) < chance_of_dying) {
-                this.is_dead = true;
+                this.is_alive = false;
             }
 
             // Due to lack of oxygen.
             if (this.tank.oxygen_level < 60) {
                 let chance_of_dying = 1 / this.tank.oxygen_level * 100;
                 if (random(0, 100) < chance_of_dying) {
-                    this.is_dead = true;
+                    this.is_alive = false;
                 }
             }
         }
 
         // Movement.
-        if (this.is_dead) {
-            this.move_to_top();
+        if (this.is_alive) {
+            this.move()
         }
         else {
-            this.move()
+            this.move_to_top();
         }
     }
 
@@ -205,20 +207,20 @@ class Fish {
     }
 
     draw() {
-        if (this.is_dead) {
-            if (this.x_velocity > 0) {
-                draw_image(this.dead_right_canvas, this.dead_right_canvas.width, this.dead_right_canvas.height, this.x, this.y, 2);
-            }
-            else {
-                draw_image(this.dead_left_canvas, this.dead_left_canvas.width, this.dead_left_canvas.height, this.x, this.y, 2);
-            }
-        }
-        else {
+        if (this.is_alive) {
             if (this.x_velocity > 0) {
                 draw_image(this.right_canvas, this.right_canvas.width, this.right_canvas.height, this.x, this.y, 2);
             }
             else {
                 draw_image(this.left_canvas, this.left_canvas.width, this.left_canvas.height, this.x, this.y, 2);
+            }
+        }
+        else {
+            if (this.x_velocity > 0) {
+                draw_image(this.dead_right_canvas, this.dead_right_canvas.width, this.dead_right_canvas.height, this.x, this.y, 2);
+            }
+            else {
+                draw_image(this.dead_left_canvas, this.dead_left_canvas.width, this.dead_left_canvas.height, this.x, this.y, 2);
             }
         }
     }
