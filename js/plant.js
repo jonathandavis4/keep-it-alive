@@ -16,8 +16,8 @@ class Plant {
         this.leaves = [];
         let leaf_count = random(0, 2);
         for (let i = 0; i < leaf_count; i++) {
-            let new_x = this.x + random(-8, 8);
-            let new_y = this.y - 8;
+            let new_x = this.x + random(-10, 10);
+            let new_y = this.y - 10;
             if (
                 new_x < 20 ||
                 new_x > 580 ||
