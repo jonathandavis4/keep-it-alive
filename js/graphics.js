@@ -18,3 +18,13 @@ function random_color() {
     var b = random(0, 255);
     return 'rgb(' + r + ', ' + g + ', ' + b +')';
 }
+
+function draw_image(source_canvas, source_width, source_height, x, y, scale_factor) {
+    context.drawImage(
+        source_canvas,
+        x - (source_width * scale_factor / 2),
+        y - (source_height * scale_factor / 2),
+        source_width * scale_factor,
+        source_height * scale_factor
+    );
+}
