@@ -12,9 +12,21 @@ class Tank {
         this.top_space = 40;
         this.height = canvas_height - this.top_space;
 
+        this.air_pump_x = random(75, this.width - 50);
         this.air_pump_is_working = true;
         this.bubbles = [];
         this.oxygen_level = 100;
+
+        this.plants = [];
+        let plant_count = random(3, 10);
+        for (let i = 0; i < plant_count; i++) {
+            this.plants.push(
+                new Plant(
+                    random(20, this.width - 20),
+                    this.height - 20 + this.top_space
+                )
+            );
+        }
     }
 
     logic() {
@@ -48,7 +60,7 @@ class Tank {
         }
         if (this.air_pump_is_working) {
             if (random(0, 10) < 4) {
-                this.bubbles.push(new Bubble(275, this.height - 40 + this.top_space));
+                this.bubbles.push(new Bubble(this.air_pump_x, this.height - 40 + this.top_space));
             }
             this.oxygen_level += 0.1;
         }
@@ -80,10 +92,13 @@ class Tank {
 
         // Draw the air pump.
         set_color('rgba(255, 255, 255, 0.2)');
-        fill_rect(250, 400, 300, this.height - 10 + this.top_space);
+        fill_rect(this.air_pump_x - 25, 400, this.air_pump_x + 25, this.height - 10 + this.top_space);
 
         // Draw the bubbles.
         this.bubbles.forEach(bubble => bubble.draw());
+
+        // Draw the plants.
+        this.plants.forEach(plant => plant.draw());
 
         // Draw the tank.
         let brown = '#3c0f0c';

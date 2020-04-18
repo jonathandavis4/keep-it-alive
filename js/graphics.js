@@ -24,6 +24,20 @@ function stroke_circle(x, y, radius) {
     context.stroke();
 }
 
+function fill_circle(x, y, radius) {
+    let rotation = 0;
+    let from_angle = 0;
+    let to_angle = 2 * Math.PI;
+    context.beginPath();
+    context.ellipse(
+        x, y,
+        radius, radius,
+        rotation,
+        from_angle, to_angle
+    );
+    context.fill();
+}
+
 function random_color() {
     var r = random(0, 255);
     var g = random(0, 255);
