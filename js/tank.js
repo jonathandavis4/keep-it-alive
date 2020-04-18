@@ -18,7 +18,7 @@ class Tank {
         this.oxygen_level = 100;
 
         this.plants = [];
-        let plant_count = random(3, 10);
+        let plant_count = random(20, 50);
         for (let i = 0; i < plant_count; i++) {
             this.plants.push(
                 new Plant(
@@ -90,15 +90,15 @@ class Tank {
         set_color('rgb(' + this.water_color[0] + ', ' + this.water_color[1] + ', ' + this.water_color[2] + ')');
         fill_rect(15, 15 + this.top_space, this.width - 15, this.height - 15 + this.top_space);
 
+        // Draw the plants.
+        this.plants.forEach(plant => plant.draw());
+
         // Draw the air pump.
-        set_color('rgba(255, 255, 255, 0.2)');
+        set_color('rgb(150, 190, 250)');
         fill_rect(this.air_pump_x - 25, 400, this.air_pump_x + 25, this.height - 10 + this.top_space);
 
         // Draw the bubbles.
         this.bubbles.forEach(bubble => bubble.draw());
-
-        // Draw the plants.
-        this.plants.forEach(plant => plant.draw());
 
         // Draw the tank.
         let brown = '#3c0f0c';
