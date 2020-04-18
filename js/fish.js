@@ -1,5 +1,9 @@
 class Fish {
-    constructor() {
+    constructor(tank) {
+        this.tank = tank;
+
+        this.age = random(0, 60);
+
         this.left_canvas = document.createElement('canvas');
         this.left_canvas.width = 20;
         this.left_canvas.height = 20;
@@ -75,8 +79,8 @@ class Fish {
         }
 
 
-        this.x = random(30, canvas_width - 30);
-        this.y = random(30, canvas_height - 30);
+        this.x = random(30, this.tank.width - 30);
+        this.y = random(30, this.tank.height - 30);
 
         this.max_x_velocity = 20;
         this.min_x_velocity = -20;
@@ -93,10 +97,62 @@ class Fish {
         this.right_canvas_context.scale(-1, 1);
         this.right_canvas_context.translate(-this.right_canvas.width, 0)
         this.right_canvas_context.drawImage(this.left_canvas, 0, 0, this.right_canvas.width, this.right_canvas.height);
+        
+        // Generate the left dead fish image.
+        this.dead_left_canvas = document.createElement('canvas');
+        this.dead_left_canvas.width = 20;
+        this.dead_left_canvas.height = 20;
+        this.dead_left_context = this.dead_left_canvas.getContext('2d');
+        for (let j = 0; j < this.left_canvas.height; j++) {
+            for (let i = 0; i < this.left_canvas.width; i++) {
+                let current_color = this.left_canvas_context.getImageData(i, j, 1, 1).data;
+                if (current_color[3] == 0) {
+                    this.dead_left_context.fillStyle = 'rgba(0, 0, 0, 0)';
+                }
+                else {
+                    let r = current_color[0] / 5;
+                    let g = current_color[1] / 5;
+                    let b = current_color[2] / 5;
+                    this.dead_left_context.fillStyle = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+                }
+                this.dead_left_context.fillRect(i, j, 1, 1);
+            }
+        }
+
+        // Generate the mirrored dead image.
+        this.dead_right_canvas = document.createElement('canvas');
+        this.dead_right_canvas.width = 20;
+        this.dead_right_canvas.height = 20;
+        this.dead_right_canvas_context = this.dead_right_canvas.getContext('2d');
+        this.dead_right_canvas_context.scale(-1, 1);
+        this.dead_right_canvas_context.translate(-this.right_canvas.width, 0)
+        this.dead_right_canvas_context.drawImage(this.dead_left_canvas, 0, 0, this.dead_right_canvas.width, this.dead_right_canvas.height);
     }
 
     logic() {
-        this.move()
+        this.age += 0.1;
+
+        if (! this.is_dead) {
+            let chance_of_dying = Math.exp((this.age - 100) / 5) * 100;
+            let rand = random(1, 100);
+            if (rand < chance_of_dying) {
+                console.log('Dead at age ' + this.age + ', ' + rand + ' < ' + chance_of_dying);
+                this.is_dead = true;
+            }
+        }
+
+        if (this.is_dead) {
+            this.move_to_top();
+        }
+        else {
+            this.move()
+        }
+    }
+
+    move_to_top() {
+        if (this.y > this.tank.top_space + 20) {
+            this.y -= 3;
+        }
     }
 
     move() {
@@ -119,31 +175,41 @@ class Fish {
             this.y_velocity = this.max_y_velocity;
         }
 
-        if (this.x < 30) {
-            this.x = 30;
+        if (this.x < 40) {
+            this.x = 40;
             this.x_velocity = 0;
         }
-        else if (this.x > canvas_width - 30) {
-            this.x = canvas_width - 30;
+        else if (this.x > this.tank.width - 40) {
+            this.x = this.tank.width - 40;
             this.x_velocity = 0;
         }
 
-        if (this.y < 30) {
-            this.y = 30;
+        if (this.y < this.tank.top_space + 40) {
+            this.y = this.tank.top_space + 40;
             this.y_velocity = 0;
         }
-        else if (this.y > canvas_height - 30) {
-            this.y = canvas_height - 30;
+        else if (this.y > this.tank.height) {
+            this.y = this.tank.height;
             this.y_velocity = 0;
         }
     }
 
     draw() {
-        if (this.x_velocity > 0) {
-            draw_image(this.right_canvas, this.right_canvas.width, this.right_canvas.height, this.x, this.y, 2);
+        if (this.is_dead) {
+            if (this.x_velocity > 0) {
+                draw_image(this.dead_right_canvas, this.dead_right_canvas.width, this.dead_right_canvas.height, this.x, this.y, 2);
+            }
+            else {
+                draw_image(this.dead_left_canvas, this.dead_left_canvas.width, this.dead_left_canvas.height, this.x, this.y, 2);
+            }
         }
         else {
-            draw_image(this.left_canvas, this.left_canvas.width, this.left_canvas.height, this.x, this.y, 2);
+            if (this.x_velocity > 0) {
+                draw_image(this.right_canvas, this.right_canvas.width, this.right_canvas.height, this.x, this.y, 2);
+            }
+            else {
+                draw_image(this.left_canvas, this.left_canvas.width, this.left_canvas.height, this.x, this.y, 2);
+            }
         }
     }
 }
