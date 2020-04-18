@@ -5,13 +5,17 @@ class Fish {
         this.left_canvas.height = 20;
         this.left_canvas_context = this.left_canvas.getContext('2d');
 
+        // Select the fish image.
+        let fish_image = null;
+        fish_image = eval('image_fish_' + random(1, 2));
+
         // Prepare the image.
         for (let j = 0; j < this.left_canvas.height; j++) {
             for (let i = 0; i < this.left_canvas.width; i++) {
                 let index = (20 * j) + i;
-                let r = image_fish_1[index][0];
-                let g = image_fish_1[index][1];
-                let b = image_fish_1[index][2];
+                let r = fish_image[index][0];
+                let g = fish_image[index][1];
+                let b = fish_image[index][2];
 
                 if (r == 0 && g == 255 && b == 0) {
                     this.left_canvas_context.fillStyle = 'rgba(0, 0, 0, 0)';
@@ -23,6 +27,57 @@ class Fish {
                 }
             }
         }
+        // Replace the magenta parts of the image with unique patterns for each fish.
+        let color_canvas = document.createElement('canvas');
+        color_canvas.width = 20;
+        color_canvas.height = 20;
+        let color_canvas_context = color_canvas.getContext('2d');
+        color_canvas_context.fillStyle = random_color();
+        color_canvas_context.fillRect(0, 0, 20, 20);
+        // Add randomly coloured shapes in random places.
+        for (let i = 0; i < 10; i++) {
+            color_canvas_context.fillStyle = random_color();
+            if (random(0, 1) == 0) {
+                console.log('Rect: ' + color_canvas_context.fillStyle);
+                let x = random(1, 20);
+                let y = random(1, 20);
+                let w = 20 - x - random(0, 20 - x);
+                let h = 20 - y - random(0, 20 - y);
+                console.log(x + ', ' + y + ', width: ' + w + ', height: ' + h);
+                color_canvas_context.fillRect(x, y, w, h);
+            }
+            else {
+                console.log('Oval: ' + color_canvas_context.fillStyle);
+                let x = random(1, 20);
+                let y = random(1, 20);
+                let radius_x = (20 - x) / 2;
+                let radius_y = (20 - y) / 2;
+                let rotation = random(0, 360) * Math.PI / 180;
+                let from_angle = random(0, 360) * Math.PI / 180;
+                let to_angle = from_angle + random(0, 2 * Math.PI - (from_angle));
+                color_canvas_context.beginPath();
+                color_canvas_context.ellipse(
+                    x, y,
+                    radius_x, radius_y,
+                    rotation,
+                    from_angle, to_angle
+                );
+                console.log(x + ', ' + y + ', rx: ' + radius_x + ', ry: ' + radius_y + ', rot: ' + rotation + ', fa: ' + from_angle + ', ta: ' + to_angle);
+                color_canvas_context.fill();
+            }
+        }
+        // Copy the generated colors to the fish image.
+        for (let j = 0; j < this.left_canvas.height; j++) {
+            for (let i = 0; i < this.left_canvas.width; i++) {
+                let new_color = color_canvas_context.getImageData(i, j, 1, 1).data;
+                let current_color = this.left_canvas_context.getImageData(i, j, 1, 1).data;
+                if (current_color[0] == 255 && current_color[1] == 0 && current_color[2] == 255) {
+                    this.left_canvas_context.fillStyle = 'rgb(' + new_color[0] + ', ' + new_color[1] + ', ' + new_color[2] + ')';
+                    this.left_canvas_context.fillRect(i, j, 1, 1);
+                }
+            }
+        }
+
 
         this.x = random(30, canvas_width - 30);
         this.y = random(30, canvas_height - 30);

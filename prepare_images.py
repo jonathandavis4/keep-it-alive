@@ -12,8 +12,12 @@ for image_file in listdir('img'):
             for i in range(20):
                 image_data[filename_without_extension].append(img.getpixel((i, j)))
 
-
+# Open and close fish_images.js to empty it.
 with open('js/fish_images.js', 'w') as output_file:
+    pass
+
+# Then open it in append mode.
+with open('js/fish_images.js', 'a') as output_file:
     for image_name, data in image_data.items():
         line = 'var {} = ['.format(image_name);
         for i, item in enumerate(data):
@@ -24,5 +28,5 @@ with open('js/fish_images.js', 'w') as output_file:
             )
             if i < len(data) - 1:
                 line += ', '
-        line += '];'
+        line += '];\n'
         output_file.write(line);
