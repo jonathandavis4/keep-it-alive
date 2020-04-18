@@ -92,6 +92,22 @@ class Game {
             context.fillStyle = 'black';
             context.fillText('Fix oxygen pump', this.tank.width + 34, 130);
         }
+
+        // Remove dead fish.
+        let has_dead_fish = false;
+        for (let i = 0; i < this.fish.length; i++) {
+            if (! this.fish[i].is_alive && this.fish[i].y <= game.tank.top_space + 20) {
+                has_dead_fish = true;
+                break;
+            }
+        }
+        if (has_dead_fish) {
+            context.fillStyle = '#6af';
+            fill_rect(this.tank.width + 10, 180, this.tank.width + 180, 210);
+            context.font = '16px Georgia';
+            context.fillStyle = 'black';
+            context.fillText('Remove dead fish', this.tank.width + 34, 200);
+        }
     }
 
     draw() {

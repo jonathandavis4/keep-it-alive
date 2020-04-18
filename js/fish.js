@@ -149,8 +149,7 @@ class Fish {
     }
 
     has_recently_bred() {
-        console.log('Last: ' + this.last_bred_age + ', now: ' + this.age + ', can breed: ' + (this.age < this.last_bred_age + 20).toString());
-        return this.age < this.last_bred_age + 1;
+        return this.age < this.last_bred_age + 2;
     }
 
     logic() {
