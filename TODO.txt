@@ -1,6 +1,6 @@
 To Do
 =====
 
-- Implement death due to overcrowding.
-- Implement feeding and hunger.
+- Implement feeding and hunger (and remove overcrowding mechanism?).
 - Implement colour inheritance in offspring.
+- Show instructions screen at the start.

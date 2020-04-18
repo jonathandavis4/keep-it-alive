@@ -154,22 +154,52 @@ class Fish {
 
     logic() {
         // Aging.
-        this.age += 0.1;
-
-        // Death.
         if (this.is_alive) {
-            // Due to age.
+            this.age += 0.1;
+        }
+
+        // Death due to age.
+        if (this.is_alive) {
             let chance_of_dying = Math.exp((this.age - 100) / 5) * 100;
             if (random(1, 100) < chance_of_dying) {
                 this.is_alive = false;
             }
+        }
 
-            // Due to lack of oxygen.
+        // Death due to lack of oxygen.
+        if (this.is_alive) {
             if (this.tank.oxygen_level < 60) {
                 let chance_of_dying = 1 / this.tank.oxygen_level * 100;
                 if (random(0, 100) < chance_of_dying) {
                     this.is_alive = false;
                 }
+            }
+        }
+
+        // Death due to overcrowding.
+        let alive_fish_count = 0;
+        let dead_fish_count = 0;
+        if (this.is_alive) {
+            for (let i = 0; i < game.fish.length; i++) {
+                if (game.fish[i].is_alive) {
+                    alive_fish_count += 1;
+                }
+                else {
+                    dead_fish_count += 1;
+                }
+            }
+            if (alive_fish_count > 50) {
+                if (random(0, 99) < 1) {
+                    this.is_alive = false;
+                }
+            }
+        }
+
+        // Death due to disease from rotting bodies.
+        if (this.is_alive) {
+            let chance_of_dying = dead_fish_count;
+            if (random(0, 4999) < chance_of_dying) {
+                this.is_alive = false;
             }
         }
 
@@ -184,7 +214,7 @@ class Fish {
 
     move_to_top() {
         if (this.y > this.tank.top_space + 20) {
-            this.y -= 3;
+            this.y -= 6;
         }
     }
 
