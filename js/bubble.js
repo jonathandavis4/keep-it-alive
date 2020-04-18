@@ -2,7 +2,7 @@ class Bubble {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.radius = random(2, 6);
+        this.radius = random(4, 8);
     }
 
     move() {

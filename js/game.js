@@ -24,7 +24,7 @@ class Game {
             }
             game.fish = new_fish;
         }))
-        this.buttons.push(new Button('Game mode', 520, function() {
+        this.buttons.push(new Button('Caretaker mode', 520, function() {
             game.mode = 'game-mode';
         }))
         this.buttons.push(new Button('Relaxation mode', 560, function() {
@@ -128,6 +128,9 @@ class Game {
         }
         context.fillStyle = 'black';
         context.fillText('Alive fish: ' + alive_fish_count + '/' + this.fish.length, this.tank.width + 6, 180);
+
+        // Game modes.
+        context.fillText('Game modes', this.tank.width + 6, 510);
 
         // Draw the buttons.
         this.buttons.forEach(button => button.draw());
