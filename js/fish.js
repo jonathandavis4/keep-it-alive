@@ -1,9 +1,16 @@
 class Fish {
-    constructor(tank) {
+    constructor(tank, species, x_pos, y_pos, age) {
         this.tank = tank;
 
         this.is_alive = true;
-        this.age = random(0, 60);
+
+        if (age === undefined) {
+            this.age = random(0, 60);
+        }
+        else {
+            this.age = age;
+        }
+        this.last_bred_age = this.age;
 
         this.left_canvas = document.createElement('canvas');
         this.left_canvas.width = 20;
@@ -12,7 +19,12 @@ class Fish {
 
         // Select the fish image.
         let fish_image = null;
-        this.species = random(1, 3);
+        if (species === undefined) {
+            this.species = random(1, 3);
+        }
+        else {
+            this.species = species;
+        }
         fish_image = eval('image_fish_' + this.species);
 
         // Prepare the image.
@@ -80,9 +92,14 @@ class Fish {
             }
         }
 
-
-        this.x = random(30, this.tank.width - 30);
-        this.y = random(30, this.tank.height - 30);
+        if (x_pos === undefined) {
+            this.x = random(30, this.tank.width - 30);
+            this.y = random(30, this.tank.height - 30);
+        }
+        else {
+            this.x = x_pos;
+            this.y = y_pos;
+        }
 
         this.max_x_velocity = 20;
         this.min_x_velocity = -20;
@@ -129,6 +146,11 @@ class Fish {
         this.dead_right_canvas_context.scale(-1, 1);
         this.dead_right_canvas_context.translate(-this.right_canvas.width, 0)
         this.dead_right_canvas_context.drawImage(this.dead_left_canvas, 0, 0, this.dead_right_canvas.width, this.dead_right_canvas.height);
+    }
+
+    has_recently_bred() {
+        console.log('Last: ' + this.last_bred_age + ', now: ' + this.age + ', can breed: ' + (this.age < this.last_bred_age + 20).toString());
+        return this.age < this.last_bred_age + 1;
     }
 
     logic() {

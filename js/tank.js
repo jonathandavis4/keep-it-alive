@@ -65,7 +65,7 @@ class Tank {
             this.oxygen_level += 0.1;
         }
         else {
-            this.oxygen_level -= 0.5;
+            this.oxygen_level -= 0.1;
         }
         if (this.oxygen_level < 0) {
             this.oxygen_level = 0;
