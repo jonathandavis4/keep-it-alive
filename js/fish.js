@@ -11,7 +11,7 @@ class Fish {
 
         // Select the fish image.
         let fish_image = null;
-        fish_image = eval('image_fish_' + random(1, 2));
+        fish_image = eval('image_fish_' + random(1, 3));
 
         // Prepare the image.
         for (let j = 0; j < this.left_canvas.height; j++) {
