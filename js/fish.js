@@ -38,16 +38,13 @@ class Fish {
         for (let i = 0; i < 10; i++) {
             color_canvas_context.fillStyle = random_color();
             if (random(0, 1) == 0) {
-                console.log('Rect: ' + color_canvas_context.fillStyle);
                 let x = random(1, 20);
                 let y = random(1, 20);
                 let w = 20 - x - random(0, 20 - x);
                 let h = 20 - y - random(0, 20 - y);
-                console.log(x + ', ' + y + ', width: ' + w + ', height: ' + h);
                 color_canvas_context.fillRect(x, y, w, h);
             }
             else {
-                console.log('Oval: ' + color_canvas_context.fillStyle);
                 let x = random(1, 20);
                 let y = random(1, 20);
                 let radius_x = (20 - x) / 2;
@@ -62,7 +59,6 @@ class Fish {
                     rotation,
                     from_angle, to_angle
                 );
-                console.log(x + ', ' + y + ', rx: ' + radius_x + ', ry: ' + radius_y + ', rot: ' + rotation + ', fa: ' + from_angle + ', ta: ' + to_angle);
                 color_canvas_context.fill();
             }
         }
