@@ -152,10 +152,9 @@ class Fish {
         return this.age < this.last_bred_age + 2;
     }
 
-    logic() {
-        // Aging.
-        if (this.is_alive) {
-            this.age += 0.1;
+    handle_death() {
+        if (game.mode == 'relax-mode') {
+            return;
         }
 
         // Death due to age.
@@ -202,6 +201,15 @@ class Fish {
                 this.is_alive = false;
             }
         }
+    }
+
+    logic() {
+        // Aging.
+        if (this.is_alive && game.mode == 'game-mode') {
+            this.age += 0.1;
+        }
+
+        this.handle_death();
 
         // Movement.
         if (this.is_alive) {

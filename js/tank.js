@@ -55,25 +55,35 @@ class Tank {
         }
 
         // Logic for the air pump.
-        if (random(0, 200) < 1) {
-            this.air_pump_is_working = false;
+        if (game.mode == 'game-mode') {
+            if (random(0, 200) < 1) {
+                this.air_pump_is_working = false;
+            }
         }
         if (this.air_pump_is_working) {
             if (random(0, 10) < 4) {
                 this.bubbles.push(new Bubble(this.air_pump_x, this.height - 40 + this.top_space));
             }
-            this.oxygen_level += 0.1;
+        }
+        if (game.mode == 'game-mode') {
+            if (this.air_pump_is_working) {
+                this.oxygen_level += 0.1;
+            }
+            else {
+                this.oxygen_level -= 0.1;
+            }
+            if (this.oxygen_level < 0) {
+                this.oxygen_level = 0;
+            }
+            if (this.oxygen_level > 100) {
+                this.oxygen_level = 100;
+            }
         }
         else {
-            this.oxygen_level -= 0.1;
-        }
-        if (this.oxygen_level < 0) {
-            this.oxygen_level = 0;
-        }
-        if (this.oxygen_level > 100) {
             this.oxygen_level = 100;
+            this.air_pump_is_working = true;
         }
-
+        
         this.bubbles.forEach(bubble => bubble.move());
         // Remove bubbles which have left the water.
         let new_bubbles = [];

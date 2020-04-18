@@ -1,5 +1,6 @@
 class Game {
     constructor() {
+        this.mode = 'game-mode';
         this.tank = new Tank();
 
         let initial_fish_count = 12;
@@ -22,6 +23,12 @@ class Game {
                 }
             }
             game.fish = new_fish;
+        }))
+        this.buttons.push(new Button('Game mode', 520, function() {
+            game.mode = 'game-mode';
+        }))
+        this.buttons.push(new Button('Relaxation mode', 560, function() {
+            game.mode = 'relax-mode';
         }))
 
         document.querySelector('canvas').addEventListener('mousedown', function(e) {
@@ -49,33 +56,35 @@ class Game {
         this.fish.forEach(f => f.logic());
 
         // Check for fish breeding.
-        let new_fish = [];
-        for (let i = 0; i < this.fish.length; i++) {
-            for (let j = 0; j < this.fish.length; j++) {
-                if (j <= i) {
-                    continue;
-                }
+        if (this.mode == 'game-mode') {
+            let new_fish = [];
+            for (let i = 0; i < this.fish.length; i++) {
+                for (let j = 0; j < this.fish.length; j++) {
+                    if (j <= i) {
+                        continue;
+                    }
 
-                let fish_1 = this.fish[i];
-                let fish_2 = this.fish[j];
+                    let fish_1 = this.fish[i];
+                    let fish_2 = this.fish[j];
 
-                if (fish_1.is_alive && fish_2.is_alive) {
-                    if (fish_1.species == fish_2.species) {
-                        if (fish_1.age > 5 && fish_2.age > 5) {
-                            if (! fish_1.has_recently_bred() && ! fish_2.has_recently_bred()) {
-                                if (get_distance(fish_1.x, fish_1.y, fish_2.x, fish_2.y) < 30) {
-                                    if (random(0, 4) < 1) {
-                                        new_fish.push(
-                                            new Fish(
-                                                this.tank,
-                                                fish_1.species,
-                                                Math.floor((fish_1.x + fish_2.x) / 2),
-                                                Math.floor((fish_1.y + fish_2.y) / 2),
-                                                0
+                    if (fish_1.is_alive && fish_2.is_alive) {
+                        if (fish_1.species == fish_2.species) {
+                            if (fish_1.age > 5 && fish_2.age > 5) {
+                                if (! fish_1.has_recently_bred() && ! fish_2.has_recently_bred()) {
+                                    if (get_distance(fish_1.x, fish_1.y, fish_2.x, fish_2.y) < 30) {
+                                        if (random(0, 4) < 1) {
+                                            new_fish.push(
+                                                new Fish(
+                                                    this.tank,
+                                                    fish_1.species,
+                                                    Math.floor((fish_1.x + fish_2.x) / 2),
+                                                    Math.floor((fish_1.y + fish_2.y) / 2),
+                                                    0
+                                                )
                                             )
-                                        )
-                                        fish_1.last_bred_age = fish_1.age;
-                                        fish_2.last_bred_age = fish_2.age;
+                                            fish_1.last_bred_age = fish_1.age;
+                                            fish_2.last_bred_age = fish_2.age;
+                                        }
                                     }
                                 }
                             }
@@ -83,8 +92,8 @@ class Game {
                     }
                 }
             }
+            new_fish.forEach(f => this.fish.push(f));
         }
-        new_fish.forEach(f => this.fish.push(f));
     }
 
     draw_background() {
